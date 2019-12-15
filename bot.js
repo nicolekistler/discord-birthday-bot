@@ -8,8 +8,17 @@ client.on('ready', () => {
 client.on('message', msg => {
   if (msg.content === '!bday') {
     msg.reply('Test');
+	msg.reply(message.member.user.tag);
   }
 });
+
+// !bday help
+// Explains how to set birthday
+
+// !bday set
+// Sets a user's birthday
+
+// !bday
 
 client.login(process.env.BOT_TOKEN);
 
