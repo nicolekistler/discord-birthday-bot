@@ -1,6 +1,5 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
-const auth = require('./auth.json');
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
@@ -12,6 +11,6 @@ client.on('message', msg => {
   }
 });
 
-client.login(auth.token);
+client.login(process.env.BOT_TOKEN);
 
 console.log('is running')
