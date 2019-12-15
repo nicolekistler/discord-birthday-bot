@@ -1,0 +1,25 @@
+{
+  "name": "discord-birthday-bot",
+  "version": "1.0.0",
+  "description": "Discord bot to wish happy birthday to server members",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nrckwr/discord-birthday-bot.git"
+  },
+  "keywords": [
+    "discord",
+    "bot"
+  ],
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nrckwr/discord-birthday-bot/issues"
+  },
+  "homepage": "https://github.com/nrckwr/discord-birthday-bot#readme",
+  "dependencies": {
+    "discord.js": "^11.5.1"
+  }
+}
