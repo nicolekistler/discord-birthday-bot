@@ -1,30 +1,28 @@
-class commands {
-	/* When a user enters help command */
+class Commands {
+	/* When a user types !bday help, list of commands is sent */
 	onHelp(msg) {
 		msg.reply('someone called for halp');
 	}
 
-	/* When a user enters set command */
+	/* When a user types !bday set, bot sets their bday */
 	onSet(msg) {
 		msg.reply('someone tried to set their bday');
 	}
 
-	/* When a user enters info command */
+	/* When a user types !bday info, info about bot is sent */
 	onInfo(msg) {
 		msg.reply('someone wanted bot info');
 	}
 
-	/* When a user enters confetti command */
+	/* When a user types !bday confetti, a cute message is sent */
 	onConfetti(msg) {
 		msg.reply('someone wanted bot to throw confetti');
 	}
 
-	/* When a user enters upcoming command */
+	/* When a user types @bday upcoming, a list of birthdays by month is sent */
 	onUpcoming(msg) {
 		msg.reply('someone wanted bot to list upcoming');
 	}
 }
 
-module.exports = commands;
-
-// msg.reply(`<@${msg.member.id}>`);
+module.exports = Commands;

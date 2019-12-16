@@ -4,6 +4,9 @@ const client  = new Discord.Client();
 const commands = require('./commands');
 const command  = new commands();
 
+const events = require('./events');
+const event  = new events();
+
 const auth = require('./auth.json');
 
 const commandMap = {
@@ -14,8 +17,16 @@ const commandMap = {
 	'upcoming' : command.onUpcoming
 }
 
-/* Send message to specified channel on ready */
-client.on('ready', () => {
+client.login(auth.token);
+
+/* When bot joins guild for the first time, do stuff */
+client.on('guildCreate', guild => {
+	if(!auth.channel_id) {
+		throw new Error('Primary channel ID not specified');
+	}
+
+	event.onBotJoin(guild);
+
 	client
 		.channels
 		.get(auth.channel_id)
@@ -41,9 +52,7 @@ client.on('message', msg => {
 
 });
 
-/* If a user leaves the discord server, check if they have a birthday and remove it if so */
+/* If a user leaves the discord server, remove their bday */
 client.on('guildMemberRemove', member => {
-	// Do something here
+	event.onMemberLeave(member);
 });
-
-client.login(auth.token);
