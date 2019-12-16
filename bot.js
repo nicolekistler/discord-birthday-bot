@@ -7,7 +7,7 @@ const command  = new commands();
 const events = require('./events');
 const event  = new events();
 
-const auth = require('./auth.json');
+const config = require('./config.json');
 
 const commandMap = {
 	'help'     : command.onHelp,
@@ -17,19 +17,19 @@ const commandMap = {
 	'upcoming' : command.onUpcoming
 }
 
-client.login(auth.token);
+client.login(config.token);
 
 /* When bot joins guild for the first time, do stuff */
 client.on('guildCreate', guild => {
-	if(!auth.channel_id) {
-		throw new Error('Primary channel ID not specified');
+	if(!config.wishes_channel_id) {
+		throw new Error('Channel ID for birthday wishes not specified in config');
 	}
 
 	event.onBotJoin(guild);
 
 	client
 		.channels
-		.get(auth.channel_id)
+		.get(config.wishes_channel_id)
 		.send('Birthday Bot is now running, type `!bday help` for valid commands 🍰');
 });
 

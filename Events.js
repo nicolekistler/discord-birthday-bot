@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 const client  = new Discord.Client();
 
-const auth = require('./auth.json');
+const config = require('./config.json');
 
 class Events {
 	/* When the bot first joins the server, do things */
