@@ -19,18 +19,17 @@ const commandMap = {
 
 client.login(config.token);
 
-/* When bot joins guild for the first time, do stuff */
-client.on('guildCreate', guild => {
+client.on('ready', () => {
+	client.channels.get(config.wishes_channel_id).send('Bot ready');
+});
+
+/* When bot joins Discord server for the first time, do stuff */
+client.on('guildCreate', () => {
 	if(!config.wishes_channel_id) {
 		throw new Error('Channel ID for birthday wishes not specified in config');
 	}
 
-	event.onBotJoin(guild);
-
-	client
-		.channels
-		.get(config.wishes_channel_id)
-		.send('Birthday Bot is now running, type `!bday help` for valid commands 🍰');
+	event.onBotJoin(client);
 });
 
 /* Trigger command event if user calls bday bot */
@@ -52,7 +51,7 @@ client.on('message', msg => {
 
 });
 
-/* If a user leaves the discord server, remove their bday */
+/* If a user leaves the Discord server, remove their bday */
 client.on('guildMemberRemove', member => {
 	event.onMemberLeave(member);
 });

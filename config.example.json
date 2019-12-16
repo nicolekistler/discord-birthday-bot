@@ -1,4 +1,6 @@
 {
 "token": "your.token.here",
-"wishes_channel_id":100000000000000
+"wishes_channel_id":100000000000000,
+"db_endpoint": "http://localhost:8000",
+"db_region": "us-east-1"
 }
