@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/nrckwr/discord-birthday-bot#readme",
   "dependencies": {
+    "aws-sdk": "^2.590.0",
     "discord.js": "^11.5.1"
   }
 }

@@ -1,25 +1,49 @@
 const Discord = require('discord.js');
-const client = new Discord.Client();
+const client  = new Discord.Client();
 
+const commands = require('./commands');
+const command  = new commands();
+
+const auth = require('./auth.json');
+
+const commandMap = {
+	'help'     : command.onHelp,
+	'set'      : command.onSet,
+	'info'     : command.onInfo,
+	'confetti' : command.onConfetti,
+	'upcoming' : command.onUpcoming
+}
+
+/* Send message to specified channel on ready */
 client.on('ready', () => {
-    console.log(`Logged in as ${client.user.tag}!`);
+	client
+		.channels
+		.get(auth.channel_id)
+		.send('Birthday Bot is now running, type `!bday help` for valid commands 🍰');
 });
 
+/* Trigger command event if user calls bday bot */
 client.on('message', msg => {
-  if (msg.content === '!bday') {
-    msg.reply('Test');
-	msg.reply(message.member.user.tag);
-  }
+	const split = msg.content.split(' ');
+
+	if(split[0] != '!bday') {
+		return;
+	}
+
+	const command_input = split[1];
+
+	if(Object.keys(commandMap).includes(command_input)) {
+		commandMap[command_input](msg);
+	}
+	else {
+		msg.reply('for info and valid Birthday Bot commands, type `!bday help`');
+	}
+
 });
 
-// !bday help
-// Explains how to set birthday
+/* If a user leaves the discord server, check if they have a birthday and remove it if so */
+client.on('guildMemberRemove', member => {
+	// Do something here
+});
 
-// !bday set
-// Sets a user's birthday
-
-// !bday
-
-client.login(process.env.BOT_TOKEN);
-
-console.log('is running')
+client.login(auth.token);
