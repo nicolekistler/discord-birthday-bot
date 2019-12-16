@@ -16,7 +16,7 @@ class Commands {
 
 	/* When a user types !bday confetti, a cute message is sent */
 	onConfetti(msg) {
-		msg.reply('(ﾉ^ヮ^)ﾉ*:・ﾟ✧');
+		msg.reply('have some confetti ♡ (ﾉ^ヮ^)ﾉ*:・ﾟ✧');
 	}
 
 	/* When a user types @bday upcoming, a list of birthdays by month is sent */
