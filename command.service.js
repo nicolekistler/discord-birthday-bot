@@ -3,6 +3,8 @@ const birthdayModel = require('./models/birthday.model');
 
 class Command {
 	constructor(msg) {
+		this.parsedInput = msg.content.split(' ');
+
 		const commandMap = {
 			'help'     : this.onHelp,
 			'set'      : this.onSet,
@@ -11,13 +13,11 @@ class Command {
 			'upcoming' : this.onUpcoming
 		}
 
-		const split = msg.content.split(' ');
-
-		if(split[0] != '!bday') {
+		if(this.parsedInput[0] != '!bday') {
 			return;
 		}
 
-		const commandInput = split[1];
+		const commandInput = this.parsedInput[1];
 
 		if(Object.keys(commandMap).includes(commandInput)) {
 			commandMap[commandInput](msg);
@@ -42,8 +42,10 @@ class Command {
 			}
 		};
 
-		birthday.docClient.put(params, function(err, data) {
+		birthday.docClient.put(params, (err, data) => {
 			if (err) {
+				this.onInvalid(msg);
+
 				console.error('Unable to add item. Error JSON:', JSON.stringify(err, null, 2));
 			} else {
 				console.log('Added item:', JSON.stringify(data, null, 2));
