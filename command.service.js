@@ -23,7 +23,7 @@ class Command {
 			commandMap[commandInput](msg);
 		}
 		else {
-			msg.reply('for info and valid Birthday Bot commands, type `!bday help`');
+			this.onInvalid(msg);
 		}
 	}
 
@@ -82,6 +82,10 @@ class Command {
 	/* When a user types @bday upcoming, a list of birthdays by month is sent */
 	onUpcoming(msg) {
 		msg.reply('someone wanted bot to list upcoming');
+	}
+
+	onInvalid(msg) {
+		msg.reply('for info and valid Birthday Bot commands, type `!bday help`');
 	}
 
 	validateBirthDate(msg) {
