@@ -31,8 +31,8 @@ class Command {
 	onSet(msg) {
 		const birthday = new birthdayModel();
 
-		const memberId = 9393939;
-		const birthDate = '11/21';
+		const memberId  = Number(msg.member.id);
+		const birthDate = 'MM/DD';
 
 		const params = {
 			TableName: birthday.tableName,
