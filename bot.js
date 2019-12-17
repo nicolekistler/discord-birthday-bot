@@ -6,23 +6,25 @@ const config          = require('./config.json');
 const client = new Discord.Client();
 const event  = new eventController();
 
+/* Provide token */
 client.login(config.token);
 
+/* Handle ready event */
 client.on('ready', () => {
 	client.channels.get(config.wishes_channel_id).send('Bot ready');
 });
 
-/* When bot joins Discord server for the first time, do stuff */
+/* Handle bot join event */
 client.on('guildCreate', () => {
 	event.onBotJoin(client);
 });
 
-/* Trigger command event if user calls bday bot */
+/* Handle command */
 client.on('message', msg => {
 	new commandService(msg);
 });
 
-/* If a user leaves the Discord server, remove their bday */
+/* Handle member leave */
 client.on('guildMemberRemove', member => {
 	event.onMemberLeave(member);
 });
