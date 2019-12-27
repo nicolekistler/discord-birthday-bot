@@ -11,17 +11,15 @@ class Birthday {
 		this.docClient = new AWS.DynamoDB.DocumentClient();
 		this.dynamodb  = new AWS.DynamoDB();
 
-		this.tableName = 'Birthdays';
+		this.tableName = 'Test';
 
 		this.schema = {
 			TableName : this.tableName,
 			KeySchema: [
-				{ AttributeName: 'member_id', KeyType: 'HASH'},
-				{ AttributeName: 'birth_date', KeyType: 'RANGE' }
+				{ AttributeName: 'member_id', KeyType: 'HASH'}
 			],
 			AttributeDefinitions: [
-				{ AttributeName: 'member_id', AttributeType: 'N' },
-				{ AttributeName: 'birth_date', AttributeType: 'S' }
+				{ AttributeName: 'member_id', AttributeType: 'N' }
 			],
 			ProvisionedThroughput: {
 				ReadCapacityUnits: 10,
@@ -30,45 +28,51 @@ class Birthday {
 		};
 	}
 
+	/* Check if record exists, create if not or update if so */
 	create(memberId, birthDate, msg) {
-		const params = {
-			TableName : this.tableName,
-			Item : {
-				member_id: memberId,
-				birth_date: birthDate
+		this.read(memberId).then(result => {
+			if(Object.entries(result).length === 0 && result.constructor === Object) {
+				const params = {
+					TableName: this.tableName,
+					Item: {
+						member_id: memberId,
+						birth_date: birthDate
+					}
+				};
+
+				this.docClient.put(params, function(err, data) {
+					if (err) {
+						msg.reply('unable to add birthday, type `!bday help` for valid input guidelines');
+					} else {
+						msg.reply('birthday successfully added');
+					}
+				});
 			}
-		};
-
-		// this.read();
-
-		this.docClient.put(params, function(err, data) {
-			if (err) {
-				msg.reply('unable to add birthday, type `!bday help` for valid input guidelines');
-
-				console.error("Unable to add item. Error JSON:", JSON.stringify(err, null, 2));
-			} else {
-				msg.reply('birthday successfully added');
-
-				console.log("Added item:", JSON.stringify(data, null, 2));
+			else {
+				console.log('result exists');
 			}
 		});
 	}
 
+	/* Scan table for birthday by member ID */
 	read(memberId) {
-		var params = {
-			TableName : this.tableName,
-			AttributeName : {
-				"member_id": memberId
+		const getParams = {
+			TableName: this.tableName,
+			AttributeName: {
+				member_id: memberId
+			},
+			Key: {
+				member_id: memberId
 			}
 		};
 
-		this.docClient.get(params, function(err, data) {
+		return this.docClient.get(getParams, function(err, data) {
 			if (err) {
 				console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
 			} else {
-				console.log("GetItem succeeded:", JSON.stringify(data, null, 2));
+				return JSON.stringify(data, null, 2);
 			}
-		});
+		}).promise();
 	}
 }
 
