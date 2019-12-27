@@ -3,56 +3,45 @@ const birthdayModel = require('./models/birthday.model');
 
 class Command {
 	constructor(msg) {
-		this.parsedInput = msg.content.split(' ');
+		const parsedInput = msg.content.split(' ');
 
 		const commandMap = {
 			'help'     : this.onHelp,
 			'set'      : this.onSet,
-			'info'     : this.onInfo,
 			'confetti' : this.onConfetti,
-			'upcoming' : this.onUpcoming
+			'upcoming' : this.onUpcoming,
 		}
 
-		if(this.parsedInput[0] != '!bday') {
+		if(parsedInput[0] != '!bday') {
 			return;
 		}
 
-		const commandInput = this.parsedInput[1];
+		const commandInput = parsedInput[1];
 
 		if(Object.keys(commandMap).includes(commandInput)) {
 			commandMap[commandInput](msg);
 		}
 		else {
-			this.onInvalid(msg);
+			msg.reply('for info and valid Birthday Bot commands, type `!bday help`');
 		}
 	}
 
 	/* When a user types !bday set, bot sets their bday */
 	onSet(msg) {
-		const birthday = new birthdayModel();
+		const parsedInput = msg.content.split(' ');
+
+		const Birthday = new birthdayModel();
 
 		const memberId  = Number(msg.member.id);
-		const birthDate = 'MM/DD';
+		const birthDate = parsedInput[2];
 
-		const params = {
-			TableName: birthday.tableName,
-			Item : {
-				'member_id'  : memberId,
-				'birth_date' : birthDate
-			}
-		};
+		if(!birthDate.match(/(0\d{1}|1[0-2])\/([0-2]\d{1}|3[0-1])/)) {
+			msg.reply('invalid birthday formatting, type `!bday help` for formatting examples');
 
-		birthday.docClient.put(params, (err, data) => {
-			if (err) {
-				this.onInvalid(msg);
+			return;
+		}
 
-				console.error('Unable to add item. Error JSON:', JSON.stringify(err, null, 2));
-			} else {
-				console.log('Added item:', JSON.stringify(data, null, 2));
-
-				msg.reply('someone tried to set their bday');
-			}
-		});
+		Birthday.create(memberId, birthDate, msg);
 	}
 
 	/* When a user types !bday help, list of commands is sent */
@@ -84,16 +73,6 @@ class Command {
 	/* When a user types @bday upcoming, a list of birthdays by month is sent */
 	onUpcoming(msg) {
 		msg.reply('someone wanted bot to list upcoming');
-	}
-
-	onInvalid(msg) {
-		msg.reply('for info and valid Birthday Bot commands, type `!bday help`');
-	}
-
-	validateBirthDate(msg) {
-		msg.reply(msg.content);
-
-		return birthDate;
 	}
 }
 
