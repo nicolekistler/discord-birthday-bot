@@ -12,7 +12,7 @@ client.login(config.token);
 /* Handle ready event */
 client.on('ready', () => {
 	client.channels.get(config.wishes_channel_id).send('Bot ready');
-	// event.onBotJoin(client);
+	event.onBotJoin(client);
 });
 
 /* Handle bot join event */

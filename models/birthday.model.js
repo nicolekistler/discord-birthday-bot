@@ -11,7 +11,7 @@ class Birthday {
 		this.docClient = new AWS.DynamoDB.DocumentClient();
 		this.dynamodb  = new AWS.DynamoDB();
 
-		this.tableName = 'Test';
+		this.tableName = 'Three';
 
 		this.schema = {
 			TableName : this.tableName,
@@ -40,12 +40,14 @@ class Birthday {
 					}
 				};
 
-				this.docClient.put(params, function(err, data) {
+				this.docClient.put(params, (err) => {
 					if (err) {
 						msg.reply('unable to add birthday, type `!bday help` for valid input guidelines');
-					} else {
-						msg.reply('birthday successfully added');
+
+						return;
 					}
+
+					msg.reply('birthday successfully added');
 				});
 			}
 			else {
@@ -66,12 +68,14 @@ class Birthday {
 			}
 		};
 
-		return this.docClient.get(getParams, function(err, data) {
+		return this.docClient.get(getParams, (err, data) => {
 			if (err) {
 				console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
-			} else {
-				return JSON.stringify(data, null, 2);
+
+				return;
 			}
+
+			return JSON.stringify(data, null, 2);
 		}).promise();
 	}
 }
