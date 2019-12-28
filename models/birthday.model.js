@@ -11,7 +11,7 @@ class Birthday {
 		this.docClient = new AWS.DynamoDB.DocumentClient();
 		this.dynamodb  = new AWS.DynamoDB();
 
-		this.tableName = 'Three';
+		this.tableName = 'Two';
 
 		this.schema = {
 			TableName : this.tableName,
@@ -29,30 +29,40 @@ class Birthday {
 	}
 
 	/* Check if record exists, create if not or update if so */
-	create(memberId, birthDate, msg) {
+	set(memberId, birthDate, msg) {
 		this.read(memberId).then(result => {
 			if(Object.entries(result).length === 0 && result.constructor === Object) {
-				const params = {
-					TableName: this.tableName,
-					Item: {
-						member_id: memberId,
-						birth_date: birthDate
-					}
-				};
+				console.log(`does not exist`);
 
-				this.docClient.put(params, (err) => {
-					if (err) {
-						msg.reply('unable to add birthday, type `!bday help` for valid input guidelines');
-
-						return;
-					}
-
-					msg.reply('birthday successfully added');
-				});
+				this.create(memberId, birthDate, msg);
 			}
 			else {
-				console.log('result exists');
+				console.log(`result exists`);
+
+				this.update(memberId, birthDate);
 			}
+		});
+
+	}
+
+	/* Create birthday record */
+	create(memberId, birthDate, msg) {
+		const params = {
+			TableName: this.tableName,
+			Item: {
+				member_id: memberId,
+				birth_date: birthDate
+			}
+		};
+
+		this.docClient.put(params, (err) => {
+			if (err) {
+				msg.reply('unable to add birthday, type `!bday help` for valid input guidelines');
+
+				return;
+			}
+
+			msg.reply('birthday successfully added');
 		});
 	}
 
@@ -77,6 +87,32 @@ class Birthday {
 
 			return JSON.stringify(data, null, 2);
 		}).promise();
+	}
+
+	update(memberId, birthDate) {
+		var params = {
+			TableName: this.tableName,
+			Key: {
+				member_id: memberId
+			},
+			UpdateExpression: 'set birth_date = :b',
+			ExpressionAttributeValues:{
+				':b':birthDate
+		},
+			ReturnValues:'UPDATED_NEW'
+		};
+
+		console.log('Updating the item...');
+
+		docClient.update(params, function(err, data) {
+			if (err) {
+				console.error('Unable to update item. Error JSON:', JSON.stringify(err, null, 2));
+
+				return;
+			}
+
+			console.log('UpdateItem succeeded:', JSON.stringify(data, null, 2));
+		});
 	}
 }
 

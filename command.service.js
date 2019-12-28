@@ -41,7 +41,7 @@ class Command {
 			return;
 		}
 
-		Birthday.create(memberId, birthDate, msg);
+		Birthday.set(memberId, birthDate, msg);
 	}
 
 	/* When a user types !bday help, list of commands is sent */
