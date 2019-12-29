@@ -1,5 +1,7 @@
-const Discord       = require('discord.js');
+const Discord = require('discord.js');
+
 const birthdayModel = require('./models/birthday.model');
+const Birthday      = new birthdayModel();
 
 class Command {
 	constructor(msg) {
@@ -30,9 +32,8 @@ class Command {
 	onSet(msg) {
 		const parsedInput = msg.content.split(' ');
 
-		const Birthday = new birthdayModel();
-
 		const memberId  = Number(msg.member.id);
+		const memberTag = msg.member.user.tag;
 		const birthDate = parsedInput[2];
 
 		const match = birthDate.match(/(0\d{1}|1[0-2])\/([0-2]\d{1}|3[0-1])/);
@@ -46,7 +47,7 @@ class Command {
 		const month = Number(match[1]);
 		const day   = Number(match[2]);
 
-		Birthday.set(memberId, month, day, msg);
+		Birthday.set(memberId, memberTag, month, day, msg);
 	}
 
 	/* When a user types !bday help, list of commands is sent */
@@ -77,7 +78,36 @@ class Command {
 
 	/* When a user types @bday upcoming, a list of birthdays by month is sent */
 	onUpcoming(msg) {
-		msg.reply('someone wanted bot to list upcoming');
+		const currentMonth = 11;
+		const yesterday = 20;
+
+		Birthday.scan({
+			ProjectionExpression: "#bm, #bd, #i, #t",
+			FilterExpression: "#bm = :current_month and #bd > :yesterday",
+			ExpressionAttributeNames: {
+				"#bm": "birth_month",
+				"#bd": "birth_day",
+				"#i": "member_id",
+				'#t': "member_tag"
+			},
+			ExpressionAttributeValues: {
+				":current_month": currentMonth,
+				":yesterday": yesterday
+			}
+		}).then(data => {
+			const bdays = [];
+
+			data.Items.forEach(item => {
+				bdays.push(`▹ ${item.member_tag} on ${item.birth_month}/${item.birth_day}`);
+			});
+
+			if(!bdays.length) {
+				msg.reply(`no upcoming birthdays for the remainder of this month`);
+			}
+			else {
+				msg.reply(`the following birthdays are coming up this month:\n${bdays.join('\n')}`);
+			}
+		});
 	}
 }
 

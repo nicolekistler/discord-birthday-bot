@@ -11,7 +11,7 @@ class Birthday {
 		this.docClient = new AWS.DynamoDB.DocumentClient();
 		this.dynamodb  = new AWS.DynamoDB();
 
-		this.tableName = 'TestNewThree';
+		this.tableName = 'TestNewFour';
 
 		this.schema = {
 			TableName : this.tableName,
@@ -29,24 +29,25 @@ class Birthday {
 	}
 
 	/* Check if record exists, create if not or update if so */
-	set(memberId, month, day, msg) {
+	set(memberId, memberTag, month, day, msg) {
 		this.read(memberId).then(result => {
 			if(Object.entries(result).length === 0 && result.constructor === Object) {
-				this.create(memberId, month, day, msg);
+				this.create(memberId, memberTag, month, day, msg);
 			}
 			else {
-				this.update(memberId, month, day, msg);
+				this.update(memberId, memberTag, month, day, msg);
 			}
 		});
 
 	}
 
 	/* Create birthday record */
-	create(memberId, month, day, msg) {
+	create(memberId, memberTag, month, day, msg) {
 		const params = {
 			TableName: this.tableName,
 			Item: {
 				member_id: memberId,
+				member_tag: memberTag,
 				birth_month: month,
 				birth_day: day
 			}
@@ -87,16 +88,17 @@ class Birthday {
 	}
 
 	/* Update birth date by member ID */
-	update(memberId, month, day, msg) {
+	update(memberId, memberTag, month, day, msg) {
 		const updateParams = {
 			TableName: this.tableName,
 			Key: {
 				member_id: memberId
 			},
-			UpdateExpression: 'set birth_month = :m, birth_day = :d',
+			UpdateExpression: 'set birth_month = :m, birth_day = :d, member_tag = :t',
 			ExpressionAttributeValues: {
 				':m': month,
-				':d': day
+				':d': day,
+				':t': memberTag
 		},
 			ReturnValues:'UPDATED_NEW'
 		};
@@ -114,7 +116,7 @@ class Birthday {
 
 	/* Delete record by member ID */
 	delete(memberId) {
-		var params = {
+		const params = {
 			TableName: this.tableName,
 			Key: {
 				member_id: memberId
@@ -132,6 +134,20 @@ class Birthday {
 				return;
 			}
 		});
+	}
+
+	scan(params = null) {
+		params.TableName = this.tableName;
+
+		return this.docClient.scan(params, (err, data) => {
+			if(err) {
+				console.log(err);
+
+				return;
+			}
+
+			return data;
+		}).promise();
 	}
 }
 

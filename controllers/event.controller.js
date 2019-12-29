@@ -1,5 +1,7 @@
-const config        = require('../config.json');
 const birthdayModel = require('../models/birthday.model');
+const Birthday      = new birthdayModel();
+
+const config = require('../config.json');
 
 class Event {
 	/* When the bot first joins the server, create table */
@@ -11,15 +13,11 @@ class Event {
 
 	/* When a member leaves the server, check if record exists and delete if yes */
 	onMemberLeave(member) {
-		const Birthday = new birthdayModel();
-
 		Birthday.delete(Number(member.id));
 	}
 
 	/* Create table using DynamoDB */
 	createTable() {
-		const Birthday = new birthdayModel();
-
 		Birthday.dynamodb.createTable(Birthday.schema, (err) => {
 			if (err) {
 				console.error('Unable to create table. Error JSON:', JSON.stringify(err, null, 2));
