@@ -77,7 +77,7 @@ class Command {
 		msg.reply('have some confetti ♡ (ﾉ^ヮ^)ﾉ*:・ﾟ✧');
 	}
 
-	/* When a user types @bday upcoming, a list of birthdays by month is sent */
+	/* When a user types !bday upcoming, a list of birthdays by month is sent */
 	onUpcoming(msg) {
 		const currentMonth = Number(moment().format('MM'));
 		const currentDay   = Number(moment().format('DD'));

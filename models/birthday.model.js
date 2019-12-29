@@ -136,6 +136,7 @@ class Birthday {
 		});
 	}
 
+	/* Scan table for provided params */
 	scan(params = null) {
 		params.TableName = this.tableName;
 
@@ -154,4 +155,3 @@ class Birthday {
 module.exports = Birthday;
 
 // Write method that checks bdays with timer
-// Write method that lists upcoming birthdays
