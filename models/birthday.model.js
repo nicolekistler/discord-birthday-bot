@@ -32,14 +32,10 @@ class Birthday {
 	set(memberId, birthDate, msg) {
 		this.read(memberId).then(result => {
 			if(Object.entries(result).length === 0 && result.constructor === Object) {
-				console.log(`does not exist`);
-
 				this.create(memberId, birthDate, msg);
 			}
 			else {
-				console.log(`result exists`);
-
-				this.update(memberId, birthDate);
+				this.update(memberId, birthDate, msg);
 			}
 		});
 
@@ -80,7 +76,7 @@ class Birthday {
 
 		return this.docClient.get(getParams, (err, data) => {
 			if (err) {
-				console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
+				console.error('Unable to read item. Error JSON:', JSON.stringify(err, null, 2));
 
 				return;
 			}
@@ -89,31 +85,55 @@ class Birthday {
 		}).promise();
 	}
 
-	update(memberId, birthDate) {
-		var params = {
+	/* Update birth date by member ID */
+	update(memberId, birthDate, msg) {
+		const updateParams = {
 			TableName: this.tableName,
 			Key: {
 				member_id: memberId
 			},
 			UpdateExpression: 'set birth_date = :b',
-			ExpressionAttributeValues:{
-				':b':birthDate
+			ExpressionAttributeValues: {
+				':b': birthDate
 		},
 			ReturnValues:'UPDATED_NEW'
 		};
 
-		console.log('Updating the item...');
-
-		docClient.update(params, function(err, data) {
+		this.docClient.update(updateParams, (err) => {
 			if (err) {
 				console.error('Unable to update item. Error JSON:', JSON.stringify(err, null, 2));
 
 				return;
 			}
 
-			console.log('UpdateItem succeeded:', JSON.stringify(data, null, 2));
+			msg.reply('birthday successfully updated');
+		});
+	}
+
+	/* Delete record by member ID */
+	delete(memberId) {
+		var params = {
+			TableName: this.tableName,
+			Key: {
+				member_id: memberId
+			},
+			ConditionExpression: 'member_id = :m',
+			ExpressionAttributeValues: {
+				':m': memberId
+			}
+		};
+
+		this.docClient.delete(params, (err) => {
+			if (err) {
+				console.error('Unable to delete item. Error JSON:', JSON.stringify(err, null, 2));
+
+				return;
+			}
 		});
 	}
 }
 
 module.exports = Birthday;
+
+// Write method that checks bdays with timer
+// Write method that lists upcoming birthdays

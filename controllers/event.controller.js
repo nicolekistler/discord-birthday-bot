@@ -11,18 +11,20 @@ class Event {
 
 	/* When a member leaves the server, check if record exists and delete if yes */
 	onMemberLeave(member) {
-		console.log(`<@${member.id}>`);
+		const Birthday = new birthdayModel();
+
+		Birthday.delete(Number(member.id));
 	}
 
 	/* Create table using DynamoDB */
 	createTable() {
-		const birthday = new birthdayModel();
+		const Birthday = new birthdayModel();
 
-		birthday.dynamodb.createTable(birthday.schema, (err, data) => {
+		Birthday.dynamodb.createTable(Birthday.schema, (err) => {
 			if (err) {
 				console.error('Unable to create table. Error JSON:', JSON.stringify(err, null, 2));
-			} else {
-				console.log('Created table. Table description JSON:', JSON.stringify(data, null, 2));
+
+				return;
 			}
 		});
 	}
