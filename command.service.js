@@ -33,8 +33,10 @@ class Command {
 	onSet(msg) {
 		const parsedInput = msg.content.split(' ');
 
-		const memberId  = Number(msg.member.id);
+		const memberId = msg.member.user.id;
+
 		const memberTag = msg.member.user.tag;
+
 		const birthDate = parsedInput[2];
 
 		const match = birthDate.match(/(0\d{1}|1[0-2])\/([0-2]\d{1}|3[0-1])/);
@@ -65,7 +67,7 @@ class Command {
 			.setTitle('Birthday Bot: Help Menu 🎉')
 			.setDescription('Listed below are available bot commands')
 			.setURL('https://github.com/nrckwr/discord-birthday-bot')
-			.setThumbnail('https://i.imgur.com/gb48j0z.png')
+			.setThumbnail('https://i.imgur.com/63Wr4u4.png')
 			.addField('__COMMAND LIST__', commandList)
 			.setTimestamp();
 
@@ -83,17 +85,17 @@ class Command {
 		const currentDay   = Number(moment().format('DD'));
 
 		Birthday.scan({
-			ProjectionExpression: "#bm, #bd, #i, #t",
-			FilterExpression: "#bm = :current_month and #bd > :current_day",
+			ProjectionExpression: '#bm, #bd, #i, #t',
+			FilterExpression: '#bm = :current_month and #bd > :current_day',
 			ExpressionAttributeNames: {
-				"#bm": "birth_month",
-				"#bd": "birth_day",
-				"#i": "member_id",
-				'#t': "member_tag"
+				'#bm': 'birth_month',
+				'#bd': 'birth_day',
+				'#i': 'member_id',
+				'#t': 'member_tag'
 			},
 			ExpressionAttributeValues: {
-				":current_month": currentMonth,
-				":current_day": currentDay
+				':current_month': currentMonth,
+				':current_day': currentDay
 			}
 		}).then(data => {
 			const bdays = [];

@@ -11,7 +11,7 @@ class Birthday {
 		this.docClient = new AWS.DynamoDB.DocumentClient();
 		this.dynamodb  = new AWS.DynamoDB();
 
-		this.tableName = 'TestNewFour';
+		this.tableName = 'DiscordServerBirthdays';
 
 		this.schema = {
 			TableName : this.tableName,
@@ -19,7 +19,7 @@ class Birthday {
 				{ AttributeName: 'member_id', KeyType: 'HASH'}
 			],
 			AttributeDefinitions: [
-				{ AttributeName: 'member_id', AttributeType: 'N' }
+				{ AttributeName: 'member_id', AttributeType: 'S' }
 			],
 			ProvisionedThroughput: {
 				ReadCapacityUnits: 10,
