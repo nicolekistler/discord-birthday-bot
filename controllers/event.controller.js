@@ -48,7 +48,7 @@ class Event {
 
 	/* When a member leaves the server, check if record exists and delete if yes */
 	onMemberLeave(member) {
-		Birthday.delete(Number(member.id));
+		Birthday.delete(member.id);
 	}
 
 	/* Create table using DynamoDB */
