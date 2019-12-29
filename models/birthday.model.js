@@ -153,5 +153,3 @@ class Birthday {
 }
 
 module.exports = Birthday;
-
-// Write method that checks bdays with timer
