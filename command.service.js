@@ -35,13 +35,18 @@ class Command {
 		const memberId  = Number(msg.member.id);
 		const birthDate = parsedInput[2];
 
-		if(!birthDate.match(/(0\d{1}|1[0-2])\/([0-2]\d{1}|3[0-1])/)) {
+		const match = birthDate.match(/(0\d{1}|1[0-2])\/([0-2]\d{1}|3[0-1])/);
+
+		if(!match) {
 			msg.reply('invalid birthday formatting, type `!bday help` for formatting examples');
 
 			return;
 		}
 
-		Birthday.set(memberId, birthDate, msg);
+		const month = Number(match[1]);
+		const day   = Number(match[2]);
+
+		Birthday.set(memberId, month, day, msg);
 	}
 
 	/* When a user types !bday help, list of commands is sent */

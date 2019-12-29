@@ -11,7 +11,7 @@ class Birthday {
 		this.docClient = new AWS.DynamoDB.DocumentClient();
 		this.dynamodb  = new AWS.DynamoDB();
 
-		this.tableName = 'Two';
+		this.tableName = 'TestNewThree';
 
 		this.schema = {
 			TableName : this.tableName,
@@ -29,25 +29,26 @@ class Birthday {
 	}
 
 	/* Check if record exists, create if not or update if so */
-	set(memberId, birthDate, msg) {
+	set(memberId, month, day, msg) {
 		this.read(memberId).then(result => {
 			if(Object.entries(result).length === 0 && result.constructor === Object) {
-				this.create(memberId, birthDate, msg);
+				this.create(memberId, month, day, msg);
 			}
 			else {
-				this.update(memberId, birthDate, msg);
+				this.update(memberId, month, day, msg);
 			}
 		});
 
 	}
 
 	/* Create birthday record */
-	create(memberId, birthDate, msg) {
+	create(memberId, month, day, msg) {
 		const params = {
 			TableName: this.tableName,
 			Item: {
 				member_id: memberId,
-				birth_date: birthDate
+				birth_month: month,
+				birth_day: day
 			}
 		};
 
@@ -86,15 +87,16 @@ class Birthday {
 	}
 
 	/* Update birth date by member ID */
-	update(memberId, birthDate, msg) {
+	update(memberId, month, day, msg) {
 		const updateParams = {
 			TableName: this.tableName,
 			Key: {
 				member_id: memberId
 			},
-			UpdateExpression: 'set birth_date = :b',
+			UpdateExpression: 'set birth_month = :m, birth_day = :d',
 			ExpressionAttributeValues: {
-				':b': birthDate
+				':m': month,
+				':d': day
 		},
 			ReturnValues:'UPDATED_NEW'
 		};
@@ -117,9 +119,9 @@ class Birthday {
 			Key: {
 				member_id: memberId
 			},
-			ConditionExpression: 'member_id = :m',
+			ConditionExpression: 'member_id = :i',
 			ExpressionAttributeValues: {
-				':m': memberId
+				':i': memberId
 			}
 		};
 
