@@ -1,5 +1,5 @@
 # Discord Birthday Bot
-Discord Birthday Bot is an open source Discord bot written in Node, utilizing Discord.js and AWS DynamoDB. The purpose of this bot is to send birthday wishes to members of your server, to help foster a sense of community.
+Birthday Bot is an open source Discord bot written in Node, utilizing Discord.js and AWS DynamoDB. The purpose of this bot is to send birthday wishes to members of your server, to help foster a sense of community.
 
 ![Bot Banner](https://i.imgur.com/tppPUiE.png "Artist credit: https://dribbble.com/alena-kamaeva")
 
