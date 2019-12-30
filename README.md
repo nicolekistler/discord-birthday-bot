@@ -4,10 +4,11 @@ Discord Birthday Bot is an open source Discord bot written in Node, utilizing Di
 ![Bot Banner](https://i.imgur.com/KdSzsh1.jpg "Artist credit: https://dribbble.com/alena-kamaeva")
 
 ## Features
-* Daily bot wishes
+* Automatic daily wishes
 * Confetti throwing
 * View upcoming server birthdays
 * Automatically removes birthday record if a user leaves the server
+* Does not require or store user age or birth year, to protect user privacy
 
 ## Set Up
 1. [Add the bot](https://discordpy.readthedocs.io/en/latest/discord.html) to your server
