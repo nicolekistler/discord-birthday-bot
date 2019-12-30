@@ -9,10 +9,10 @@ Discord Birthday Bot is an open source Discord bot written in Node, utilizing Di
 * View upcoming server birthdays
 * Automatically removes birthday record if a user leaves the server
 
-## Get Started
+## Set Up
 1. [Add the bot](https://discordpy.readthedocs.io/en/latest/discord.html) to your server
-2. Create a file called config.json, following the example provided in config.example.json
-3. Host it with your favorite provider ([Heroku](https://shiffman.net/a2z/bot-heroku/) is a popular free choice)
+2. Create a file called config.json (see config.example.json)
+3. Host Birthday Bot with your favorite provider, [Heroku](https://shiffman.net/a2z/bot-heroku/) is a popular free choice
 
-## Example
+## Preview
 ![Bot Banner](https://i.imgur.com/3fZZKEv.gif "Example")
