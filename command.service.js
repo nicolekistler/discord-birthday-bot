@@ -106,10 +106,11 @@ class Command {
 
 			if(!bdays.length) {
 				msg.reply(`no upcoming birthdays for the remainder of this month`);
+
+				return;
 			}
-			else {
-				msg.reply(`the following birthdays are coming up this month 🎂:\n${bdays.join('\n')}`);
-			}
+
+			msg.reply(`the following birthdays are coming up this month 🎂:\n${bdays.join('\n')}`);
 		});
 	}
 }
